@@ -10,5 +10,8 @@
 #import <UIKit/UIKit.h>
 
 @interface Utils : NSObject
+
 + (UIColor *)colorWithColorCode:(NSString *)code alpha:(double)alpha;
++ (void)setBackBarButtonItemNonTitle:(UIViewController *)con;
+
 @end

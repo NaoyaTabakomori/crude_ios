@@ -14,7 +14,6 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     EditViewController *con = [EditViewController new];
@@ -22,6 +21,7 @@
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
     navi.interactivePopGestureRecognizer.enabled = NO;
     [UINavigationBar appearance].barTintColor = kNavBarColor;
+    [UINavigationBar appearance].tintColor = [UIColor whiteColor];
     [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
     self.window.backgroundColor = [UIColor whiteColor];

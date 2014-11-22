@@ -23,4 +23,11 @@
                            alpha:(CGFloat)alpha];
 }
 
++ (void)setBackBarButtonItemNonTitle:(UIViewController *)con
+{
+    UIBarButtonItem *backButton = [UIBarButtonItem new];
+    backButton.title = @"";
+    [con.navigationItem setBackBarButtonItem:backButton];
+}
+
 @end
