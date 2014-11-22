@@ -1,4 +1,4 @@
-crude_web
+crude_ios
 =========
 
-雑コラのweb
+雑コラのios
