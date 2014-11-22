@@ -16,7 +16,24 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    EditViewController *con = [EditViewController new];
+    
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
+    [UINavigationBar appearance].barTintColor = ColorWithAlpha(@"332C35", 1.0);
+    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    
+//    navi.interactivePopGestureRecognizer.enabled = NO;
+//    [UINavigationBar appearance].barTintColor = kActiveColor;
+//    [UINavigationBar appearance].tintColor = [UIColor whiteColor];
+//    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor],
+//                                                         NSFontAttributeName: [Utils yasashisaFontWithSize:17]};
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window setRootViewController:navi];
+    [self.window makeKeyAndVisible];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     return YES;
 }
 

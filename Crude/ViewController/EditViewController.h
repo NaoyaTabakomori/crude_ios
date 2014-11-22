@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  EditViewController.h
 //  Crude
 //
 //  Created by Tomoya Itagawa on 2014/11/22.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface EditViewController : UIViewController
 
 @end
-
