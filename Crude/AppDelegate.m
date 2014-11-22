@@ -20,14 +20,9 @@
     EditViewController *con = [EditViewController new];
     
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
-    [UINavigationBar appearance].barTintColor = ColorWithAlpha(@"332C35", 1.0);
+    navi.interactivePopGestureRecognizer.enabled = NO;
+    [UINavigationBar appearance].barTintColor = kNavBarColor;
     [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
-    
-//    navi.interactivePopGestureRecognizer.enabled = NO;
-//    [UINavigationBar appearance].barTintColor = kActiveColor;
-//    [UINavigationBar appearance].tintColor = [UIColor whiteColor];
-//    [UINavigationBar appearance].titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor],
-//                                                         NSFontAttributeName: [Utils yasashisaFontWithSize:17]};
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window setRootViewController:navi];

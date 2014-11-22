@@ -2,6 +2,14 @@
 
 @implementation UIView (Util)
 
++ (id)viewFromXibWithOwner:(id)owner
+{
+    UINib *nib = [UINib nibWithNibName:NSStringFromClass([self class]) bundle:nil];
+    if (nib == nil) return nil;
+    
+    return [[nib instantiateWithOwner:owner options:nil] objectAtIndex:0];
+}
+
 - (CGPoint)origin
 {
     return self.frame.origin;

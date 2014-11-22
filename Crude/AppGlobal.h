@@ -10,6 +10,6 @@
 #define Crude_AppGlobal_h
 
 //Color
-#define kActiveColor 
+#define kNavBarColor [Utils colorWithColorCode:@"332C35" alpha:1.0]
 
 #endif

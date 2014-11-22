@@ -13,6 +13,7 @@
 @property (readonly) CGFloat frameBottom;
 @property (readonly) CGFloat frameRight;
 
++ (id)viewFromXibWithOwner:(id)owner;
 - (void)removeAllSubviews;
 - (void)showWithFadeAnimaton;
 - (void)closeWithFadeAnimaton;
