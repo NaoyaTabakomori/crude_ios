@@ -35,16 +35,19 @@
                     </connections>
                 </segmentedControl>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AYm-l7-4O1">
-                    <rect key="frame" x="20" y="395" width="70" height="40"/>
+                    <rect key="frame" x="20" y="395" width="60" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <state key="normal" title="切り抜き"/>
+                    <state key="normal" title="切り抜き">
+                        <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
                     <connections>
                         <action selector="tappedClipButton:" destination="-1" eventType="touchUpInside" id="0ln-AL-CEZ"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Bm8-nR-g3n">
-                    <rect key="frame" x="160" y="395" width="70" height="40"/>
+                    <rect key="frame" x="166" y="395" width="60" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal" title="素材から"/>
@@ -53,7 +56,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="PGr-b4-0NV">
-                    <rect key="frame" x="230" y="395" width="70" height="40"/>
+                    <rect key="frame" x="239" y="395" width="60" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal" title="アルバム"/>
@@ -62,8 +65,9 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8N0-Yh-bzg">
-                    <rect key="frame" x="20" y="440" width="280" height="40"/>
+                    <rect key="frame" x="20" y="435" width="280" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                     <state key="normal" title="完成"/>
                     <connections>
                         <action selector="tappedCompleteButton:" destination="-1" eventType="touchUpInside" id="gtr-Tf-wGN"/>
@@ -78,9 +82,9 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fTp-tF-meJ">
-                    <rect key="frame" x="90" y="395" width="70" height="40"/>
+                    <rect key="frame" x="93" y="395" width="60" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal" title="貼り付け"/>
                     <connections>
                         <action selector="tappedPasteButton:" destination="-1" eventType="touchUpInside" id="JJr-cn-5nh"/>

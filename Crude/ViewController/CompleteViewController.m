@@ -22,6 +22,7 @@
     
     self.title = @"完成";
     [Utils setBackBarButtonItemNonTitle:self];
+    [self setupButton];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     [hud setDimBackground:YES];
@@ -56,6 +57,29 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setupButton
+{
+    [self.shareButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.shareButton setBackgroundColor:[Utils colorWithColorCode:@"B58778" alpha:1.0]];
+    [self makeCornerRound:self.shareButton];
+    [self makeShadow:self.shareButton];
+}
+
+- (void)makeCornerRound:(UIButton *)button
+{
+    [button.layer setCornerRadius:5.0];
+    [button setClipsToBounds:YES];
+}
+
+- (void)makeShadow:(UIButton *)button
+{
+    button.layer.masksToBounds = NO;
+    button.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
+    button.layer.shadowOpacity = 0.7f;
+    button.layer.shadowColor = [UIColor blackColor].CGColor;
+    button.layer.shadowRadius = 3.0f;
 }
 
 - (IBAction)tappedStartButton:(id)sender

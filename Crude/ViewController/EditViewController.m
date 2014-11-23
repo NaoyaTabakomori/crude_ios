@@ -34,6 +34,7 @@ enum {
     self.selectedMode = kTagTarget;
     [Utils setBackBarButtonItemNonTitle:self];
     [self.segmentedControl setTintColor:kNavBarColor];
+    [self setUpButton];
     [self setupClipView];
 }
 
@@ -51,6 +52,47 @@ enum {
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setUpButton
+{
+    [self.clipButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.clipButton setBackgroundColor:[Utils colorWithColorCode:@"6D767B" alpha:1.0]];
+    [self.pasteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.pasteButton setBackgroundColor:[Utils colorWithColorCode:@"ACC38E" alpha:1.0]];
+    [self.selectMaterialButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.selectMaterialButton setBackgroundColor:[Utils colorWithColorCode:@"D8C189" alpha:1.0]];
+    [self.selectAlbumButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.selectAlbumButton setBackgroundColor:[Utils colorWithColorCode:@"866A54" alpha:1.0]];
+    [self.completeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.completeButton setBackgroundColor:[Utils colorWithColorCode:@"B58778" alpha:1.0]];
+    
+    [self makeCornerRound:self.clipButton];
+    [self makeCornerRound:self.pasteButton];
+    [self makeCornerRound:self.selectMaterialButton];
+    [self makeCornerRound:self.selectAlbumButton];
+    [self makeCornerRound:self.completeButton];
+    
+    [self makeShadow:self.clipButton];
+    [self makeShadow:self.pasteButton];
+    [self makeShadow:self.selectMaterialButton];
+    [self makeShadow:self.selectAlbumButton];
+    [self makeShadow:self.completeButton];
+}
+
+- (void)makeCornerRound:(UIButton *)button
+{
+    [button.layer setCornerRadius:5.0];
+    [button setClipsToBounds:YES];
+}
+
+- (void)makeShadow:(UIButton *)button
+{
+    button.layer.masksToBounds = NO;
+    button.layer.shadowOffset = CGSizeMake(5.0f, 5.0f);
+    button.layer.shadowOpacity = 0.7f;
+    button.layer.shadowColor = [UIColor blackColor].CGColor;
+    button.layer.shadowRadius = 3.0f;
 }
 
 - (void)setupClipView
