@@ -10,12 +10,12 @@
 
 @interface CompleteViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIImageView *collageImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *completeImageView;
 @property (weak, nonatomic) IBOutlet UIButton *startCollageButton;
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (weak, nonatomic) IBOutlet UIButton *changeAncestorButton;
 @property (weak, nonatomic) IBOutlet UIButton *changeParentButton;
 
-@property (strong, nonatomic) UIImage *collageImage;
+@property (strong, nonatomic) UIImage *completeImage;
 
 @end

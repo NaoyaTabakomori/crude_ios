@@ -30,7 +30,7 @@ static NSString * const kShareMessage = @"雑コラ！";
 {
     [super viewWillAppear:animated];
     
-    [self.collageImageView setImage:self.collageImage];
+    [self.completeImageView setImage:self.completeImage];
 }
 
 - (void)didReceiveMemoryWarning
@@ -41,11 +41,12 @@ static NSString * const kShareMessage = @"雑コラ！";
 
 - (IBAction)tappedStartButton:(id)sender
 {
-    EditViewController *con = [EditViewController new];
-    con.title = @"編集";
-    con.collageImage = self.collageImage;
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
-    [self presentViewController:navi animated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
+//    EditViewController *con = [EditViewController new];
+//    con.title = @"編集";
+//    con.collageImage = self.completeImage;
+//    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
+//    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (IBAction)tappedShareButton:(id)sender

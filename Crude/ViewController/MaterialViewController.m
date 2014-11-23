@@ -78,7 +78,7 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
     CompleteViewController *con = [CompleteViewController new];
     NSString *title = [NSString stringWithFormat:@"%zd_full.JPG", indexPath.row + 1];
     UIImage *image = [UIImage imageNamed:title];
-    con.collageImage = image;
+    con.completeImage = image;
     [self.navigationController pushViewController:con animated:YES];
 }
 

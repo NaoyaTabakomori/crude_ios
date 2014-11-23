@@ -9,7 +9,7 @@
             <connections>
                 <outlet property="changeAncestorButton" destination="aFF-wF-Fdo" id="aTJ-vL-ZJT"/>
                 <outlet property="changeParentButton" destination="HTe-1g-p34" id="Var-5K-Hb3"/>
-                <outlet property="collageImageView" destination="RtM-7d-mpT" id="aQ4-Av-SOI"/>
+                <outlet property="completeImageView" destination="RtM-7d-mpT" id="pcH-GF-SvA"/>
                 <outlet property="shareButton" destination="aDh-XN-eKe" id="r7v-Ax-Dl5"/>
                 <outlet property="startCollageButton" destination="ReY-iF-r2H" id="omk-4d-TRs"/>
                 <outlet property="view" destination="zhp-5T-Lfw" id="hDb-PF-rcl"/>
@@ -20,7 +20,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="RtM-7d-mpT">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="RtM-7d-mpT">
                     <rect key="frame" x="20" y="71" width="280" height="280"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </imageView>
