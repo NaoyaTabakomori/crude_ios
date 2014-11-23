@@ -8,6 +8,7 @@
 
 #import "MaterialViewController.h"
 #import "CompleteViewController.h"
+#import "MaterialCell.h"
 
 #ifdef DEBUG
 static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
@@ -29,7 +30,7 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
     self.title = @"素材";
     
     __weak typeof(self) wself = self;
-    [CallAPI callGetWithPath:@"images.json"
+    [CallAPI callGetWithPath:@"list.json"
                   parameters:nil
                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
                          wself.dataList = responseObject;
@@ -54,19 +55,55 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
     return self.dataList.count;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 200;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
+    MaterialCell *cell = (MaterialCell *)[tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
+        cell = [[MaterialCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
     
     NSDictionary *data = self.dataList[indexPath.row];
     NSString *path = [data valueForKeyPath:@"large_image.path"];
     NSString *query = [data valueForKeyPath:@"large_image.query"];
     NSString *urlString = [NSString stringWithFormat:@"%@%@?%@", kS3Host, path, query];
-    [cell.imageView setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:nil];
-    [cell.textLabel setText:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+    [NSURLConnection
+     sendAsynchronousRequest:request
+     queue:[NSOperationQueue mainQueue]
+     completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+         if (!connectionError) {
+             UIImage *image = [[UIImage alloc] initWithData:data];
+             [cell.materialImageView setImage:image];
+         } else {
+             [CallAPI showErrorAlert];
+         }
+     }];
+    
+//    [cell.materialImageView sd_setImageWithURL:[NSURL URLWithString:urlString]];
+    
+//    [AFImageRequestOperation imageRequestOperationWithRequest:request
+//     　   imageProcessingBlock:nil
+//                                                      success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+//                                                          _imageView.image = image;
+//                                                      } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+//                                                          _imageView.image = 読み込み失敗の画像など;
+//                                                      }];
+    
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+//    [cell.materialImageView
+//     setImageWithURLRequest:request
+//     placeholderImage:nil
+//     success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+//         NSLog(@"honoka");
+//     }
+//     failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+//         NSLog(@"error:%@", error.description);
+//     }];
+//    [cell.materialImageView setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:nil];
     
     return cell;
 }
@@ -75,11 +112,10 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    CompleteViewController *con = [CompleteViewController new];
-    NSString *title = [NSString stringWithFormat:@"%zd_full.JPG", indexPath.row + 1];
-    UIImage *image = [UIImage imageNamed:title];
-    con.completeImage = image;
-    [self.navigationController pushViewController:con animated:YES];
+//    CompleteViewController *con = [CompleteViewController new];
+//    MaterialCell *cell = (MaterialCell *)[tableView cellForRowAtIndexPath:indexPath];
+//    con.completeImage = cell.materialImageView.image;
+//    [self.navigationController pushViewController:con animated:YES];
 }
 
 /*

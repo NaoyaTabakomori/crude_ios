@@ -16,6 +16,7 @@ typedef void (^AFFailureBlock) (AFHTTPRequestOperation *operation, NSError *erro
 
 + (void)callGetWithPath:(NSString*)path parameters:(NSDictionary*)parameters success:(AFSuccessBlock)success error:(AFFailureBlock)error;
 + (void)callPostWithPath:(NSString*)path parameters:(NSDictionary*)parameters success:(AFSuccessBlock)success error:(AFFailureBlock)error;
++ (void)uploadImage:(UIImage *)image;
 + (void)showErrorAlert;
 
 @end

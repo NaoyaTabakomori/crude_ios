@@ -41,12 +41,16 @@ static NSString * const kShareMessage = @"雑コラ！";
 
 - (IBAction)tappedStartButton:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
-//    EditViewController *con = [EditViewController new];
-//    con.title = @"編集";
-//    con.collageImage = self.completeImage;
-//    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
-//    [self presentViewController:navi animated:YES completion:nil];
+    for (UIViewController *con in self.navigationController.viewControllers) {
+        if ([con isKindOfClass:[EditViewController class]]) {
+            [self.navigationController popToViewController:con animated:YES];
+            return;
+        }
+    }
+    
+    EditViewController *con = [EditViewController new];
+    con.collageImage = self.completeImage;
+    [self.navigationController pushViewController:con animated:YES];
 }
 
 - (IBAction)tappedShareButton:(id)sender

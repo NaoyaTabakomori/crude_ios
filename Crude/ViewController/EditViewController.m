@@ -168,10 +168,10 @@ enum {
 
 - (IBAction)tappedMaterialButton:(id)sender
 {
-    MaterialViewController *con = [[MaterialViewController alloc] initWithStyle:UITableViewStylePlain];
-    con.title = @"素材";
-    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
-    [self presentViewController:navi animated:YES completion:nil];
+//    MaterialViewController *con = [[MaterialViewController alloc] initWithStyle:UITableViewStylePlain];
+//    con.title = @"素材";
+//    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
+//    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (IBAction)tappedCompleteButton:(id)sender
@@ -179,8 +179,10 @@ enum {
     CompleteViewController *con = [CompleteViewController new];
     if (self.selectedMode == kTagTarget) {
         con.completeImage = self.collageImageView.image;
+        [CallAPI uploadImage:self.collageImageView.image];
     } else if (self.selectedMode == kTagMaterial) {
         con.completeImage = self.materialImageView.image;
+        [CallAPI uploadImage:self.materialImageView.image];
     }
     [self.navigationController pushViewController:con animated:YES];
 }
@@ -202,5 +204,7 @@ enum {
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+
 
 @end
