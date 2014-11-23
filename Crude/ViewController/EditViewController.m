@@ -12,11 +12,15 @@
 
 enum {
     kTagTarget,
-    kTagMaterial
+    kTagMaterial,
+    kTagClip,
+    kTagPaste
 };
 
 @interface EditViewController()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (assign, nonatomic) NSInteger selectedMode;
+@property (strong, nonatomic) UIView *clippedView;
+@property (strong, nonatomic) UIImage *clippedImage;
 @end
 
 @implementation EditViewController
@@ -26,8 +30,23 @@ enum {
     [super viewDidLoad];
     
     self.title = @"編集";
+    self.selectedMode = kTagTarget;
     [Utils setBackBarButtonItemNonTitle:self];
     [self.segmentedControl setTintColor:kNavBarColor];
+    
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(draggedView:)];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(doubleTappedView:)];
+    [tapGesture setNumberOfTapsRequired:2];
+    
+    self.clippedView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    [self.clippedView setTag:kTagClip];
+    [self.clippedView setHidden:YES];
+    [self.clippedView setBackgroundColor:[Utils colorWithColorCode:@"FFFFFF" alpha:0.6]];
+    [self.clippedView addGestureRecognizer:panGesture];
+    [self.clippedView addGestureRecognizer:tapGesture];
+    [self.view addSubview:self.clippedView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -46,9 +65,77 @@ enum {
 - (IBAction)changedSegment:(id)sender
 {
     if (self.segmentedControl.selectedSegmentIndex == kTagTarget) {
-        
+        self.selectedMode = kTagTarget;
+        [self.collageImageView setHidden:NO];
+        [self.materialImageView setHidden:YES];
     } else if (self.segmentedControl.selectedSegmentIndex == kTagMaterial) {
-        
+        self.selectedMode = kTagMaterial;
+        [self.materialImageView setHidden:NO];
+        [self.collageImageView setHidden:YES];
+    }
+}
+
+- (IBAction)tappedClipButton:(id)sender
+{
+    [self.clippedView setHidden:NO];
+}
+
+- (void)doubleTappedView:(UITapGestureRecognizer *)tapGesture
+{
+    if (self.selectedMode == kTagTarget) {
+        CGRect rect = CGRectMake(self.clippedView.originX - self.collageImageView.originX,
+                                 self.clippedView.originY - self.collageImageView.originY,
+                                 self.clippedView.sizeWidth,
+                                 self.clippedView.sizeHeight);
+        self.clippedImage =  [self.collageImageView.image clipImageWithRect:rect
+                                                              imageViewSize:self.collageImageView.frame.size];
+        [self.clippedView setHidden:YES];
+    } else if (self.selectedMode == kTagMaterial) {
+        CGRect rect = CGRectMake(self.clippedView.originX - self.materialImageView.originX,
+                                 self.clippedView.originY - self.materialImageView.originY,
+                                 self.clippedView.sizeWidth,
+                                 self.clippedView.sizeHeight);
+        self.clippedImage =  [self.materialImageView.image clipImageWithRect:rect
+                                                               imageViewSize:self.materialImageView.frame.size];
+        [self.clippedView setHidden:YES];
+    }
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
+                                                    message:@"切り取りました"
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"OK", nil];
+    [alert show];
+}
+
+- (void)draggedView:(UIPanGestureRecognizer *)panGesture
+{
+    if (panGesture.view.tag == kTagClip) {
+        CGPoint location = [panGesture translationInView:self.view];
+        CGPoint movedPoint = CGPointMake(self.clippedView.centerX + location.x, self.clippedView.centerY + location.y);
+        [self.clippedView setCenter:movedPoint];
+        [panGesture setTranslation:CGPointZero inView:self.view];
+    } else if (panGesture.view.tag == kTagPaste) {
+        CGPoint location = [panGesture translationInView:self.view];
+        CGPoint movedPoint = CGPointMake(panGesture.view.centerX + location.x, panGesture.view.centerX + location.y);
+        [panGesture.view setCenter:movedPoint];
+        [panGesture setTranslation:CGPointZero inView:self.view];
+    }
+}
+
+- (IBAction)tappedPasteButton:(id)sender
+{
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(draggedView:)];
+    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.clippedView.sizeWidth, self.clippedView.sizeHeight)];
+    [iv setTag:kTagPaste];
+    [iv setImage:self.clippedImage];
+    [iv setUserInteractionEnabled:YES];
+    [iv addGestureRecognizer:panGesture];
+    if (self.selectedMode == kTagTarget) {
+        [self.collageImageView addSubview:iv];
+    } else if (self.selectedMode == kTagMaterial) {
+        [self.materialImageView addSubview:iv];
     }
 }
 
@@ -72,9 +159,9 @@ enum {
 {
 //    CompleteViewController *con = [CompleteViewController new];
 //    con.collageImage = self.collageImageView.image;
-    CompleteViewController *con = (CompleteViewController *)self.presentingViewController;
-    con.collageImage = self.collageImageView.image;
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    CompleteViewController *con = (CompleteViewController *)self.presentingViewController;
+//    con.collageImage = self.collageImageView.image;
+//    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -83,7 +170,11 @@ enum {
     [self dismissViewControllerAnimated:YES completion:nil];
     
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    [self.collageImageView setImage:image];
+    if (self.selectedMode == kTagTarget) {
+        [self.collageImageView setImage:image];
+    } else if (self.selectedMode == kTagMaterial) {
+        [self.materialImageView setImage:image];
+    }
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker

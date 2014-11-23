@@ -10,7 +10,7 @@
 #import "CompleteViewController.h"
 
 #ifdef DEBUG
-static NSString * const kS3host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
+static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
 #else
 static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
 #endif
@@ -64,7 +64,7 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
     NSDictionary *data = self.dataList[indexPath.row];
     NSString *path = [data valueForKeyPath:@"large_image.path"];
     NSString *query = [data valueForKeyPath:@"large_image.query"];
-    NSString *urlString = [NSString stringWithFormat:@"%@%@?%@", kS3host, path, query];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@?%@", kS3Host, path, query];
     [cell.imageView setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:nil];
     [cell.textLabel setText:path];
     

@@ -15,5 +15,6 @@
 #import "UINavigationController+Util.h"
 #import "CallAPI.h"
 #import <UIImageView+AFNetworking.h>
+#import "UIImage+Util.h"
 
 #endif
