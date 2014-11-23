@@ -21,6 +21,7 @@ enum {
 @property (assign, nonatomic) NSInteger selectedMode;
 @property (strong, nonatomic) UIView *clippedView;
 @property (strong, nonatomic) UIImage *clippedImage;
+@property (assign, nonatomic) CGAffineTransform currentClipTransform;
 @end
 
 @implementation EditViewController
@@ -33,22 +34,7 @@ enum {
     self.selectedMode = kTagTarget;
     [Utils setBackBarButtonItemNonTitle:self];
     [self.segmentedControl setTintColor:kNavBarColor];
-    
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(draggedView:)];
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(doubleTappedView:)];
-    [tapGesture setNumberOfTapsRequired:2];
-//    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self
-//                                                                                       action:@selector(pinchedView:)];
-    self.clippedView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
-    [self.clippedView setTag:kTagClip];
-    [self.clippedView setHidden:YES];
-    [self.clippedView setBackgroundColor:[Utils colorWithColorCode:@"FFFFFF" alpha:0.6]];
-    [self.clippedView addGestureRecognizer:panGesture];
-    [self.clippedView addGestureRecognizer:tapGesture];
-//    [self.clippedView addGestureRecognizer:pinchGesture];
-    [self.view addSubview:self.clippedView];
+    [self setupClipView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,24 +53,29 @@ enum {
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)changedSegment:(id)sender
+- (void)setupClipView
 {
-    if (self.segmentedControl.selectedSegmentIndex == kTagTarget) {
-        self.selectedMode = kTagTarget;
-        [self.collageImageView setHidden:NO];
-        [self.materialImageView setHidden:YES];
-    } else if (self.segmentedControl.selectedSegmentIndex == kTagMaterial) {
-        self.selectedMode = kTagMaterial;
-        [self.materialImageView setHidden:NO];
-        [self.collageImageView setHidden:YES];
-    }
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(doubleTappedView:)];
+    [tapGesture setNumberOfTapsRequired:2];
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                 action:@selector(draggedView:)];
+    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self
+                                                                                       action:@selector(pinchedView:)];
+//    UIRotationGestureRecognizer *rotateGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self
+//                                                                                              action:@selector(rotatedView:)];
+    self.clippedView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    [self.clippedView setTag:kTagClip];
+    [self.clippedView setHidden:YES];
+    [self.clippedView setBackgroundColor:[Utils colorWithColorCode:@"9A9E93" alpha:0.6]];
+    [self.clippedView addGestureRecognizer:tapGesture];
+    [self.clippedView addGestureRecognizer:panGesture];
+    [self.clippedView addGestureRecognizer:pinchGesture];
+//    [self.clippedView addGestureRecognizer:rotateGesture];
+    [self.view addSubview:self.clippedView];
 }
 
-- (IBAction)tappedClipButton:(id)sender
-{
-    [self.clippedView setHidden:NO];
-}
-
+#pragma mark - clipView Gesture
 - (void)doubleTappedView:(UITapGestureRecognizer *)tapGesture
 {
     if (tapGesture.view.tag == kTagClip) {
@@ -142,7 +133,35 @@ enum {
 
 - (void)pinchedView:(UIPinchGestureRecognizer *)pinchGesture
 {
-    
+    if (pinchGesture.state == UIGestureRecognizerStateBegan) {
+        self.currentClipTransform = self.clippedView.transform;
+    }
+    CGFloat scale = [pinchGesture scale];
+    self.clippedView.transform = CGAffineTransformConcat(self.currentClipTransform, CGAffineTransformMakeScale(scale, scale));
+}
+
+- (void)rotatedView:(UIRotationGestureRecognizer *)rotateGesture
+{
+}
+
+#pragma mark - tappedButton
+
+- (IBAction)changedSegment:(id)sender
+{
+    if (self.segmentedControl.selectedSegmentIndex == kTagTarget) {
+        self.selectedMode = kTagTarget;
+        [self.collageImageView setHidden:NO];
+        [self.materialImageView setHidden:YES];
+    } else if (self.segmentedControl.selectedSegmentIndex == kTagMaterial) {
+        self.selectedMode = kTagMaterial;
+        [self.materialImageView setHidden:NO];
+        [self.collageImageView setHidden:YES];
+    }
+}
+
+- (IBAction)tappedClipButton:(id)sender
+{
+    [self.clippedView setHidden:NO];
 }
 
 - (IBAction)tappedPasteButton:(id)sender
@@ -215,7 +234,5 @@ enum {
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
-
 
 @end
