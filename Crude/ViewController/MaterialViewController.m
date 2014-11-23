@@ -30,7 +30,7 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
     self.title = @"素材";
     
     __weak typeof(self) wself = self;
-    [CallAPI callGetWithPath:@"list.json"
+    [CallAPI callGetWithPath:nil
                   parameters:nil
                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
                          wself.dataList = responseObject;

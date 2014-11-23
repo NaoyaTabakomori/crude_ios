@@ -10,10 +10,8 @@
 #import <Social/Social.h>
 #import "EditViewController.h"
 
-static NSString * const kShareMessage = @"雑コラ！";
-
 @interface CompleteViewController()<UIActionSheetDelegate>
-
+@property (strong, nonatomic) NSString *shareMessage;
 @end
 
 @implementation CompleteViewController
@@ -24,6 +22,27 @@ static NSString * const kShareMessage = @"雑コラ！";
     
     self.title = @"完成";
     [Utils setBackBarButtonItemNonTitle:self];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    [hud setDimBackground:YES];
+    __weak typeof(self) wself = self;
+    [CallAPI uploadImage:self.completeImage success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [MBProgressHUD hideAllHUDsForView:wself.navigationController.view
+                                 animated:YES];
+        wself.shareMessage = [NSString stringWithFormat:@"%@/show/%zd #雑コラ",
+                              kAPIHost, [responseObject[@"id"] integerValue]];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"お知らせ"
+                                                        message:@"アップロードが完了しました。"
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:wself.navigationController.view
+                                 animated:YES];
+        wself.shareMessage = @"#雑コラ";
+        [CallAPI showErrorAlert];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -43,14 +62,13 @@ static NSString * const kShareMessage = @"雑コラ！";
 {
     for (UIViewController *con in self.navigationController.viewControllers) {
         if ([con isKindOfClass:[EditViewController class]]) {
-            [self.navigationController popToViewController:con animated:YES];
+            EditViewController *edit = (EditViewController *)con;
+            edit.segmentedControl.selectedSegmentIndex = 0;
+            edit.collageImage = self.completeImage;
+            [self.navigationController popToViewController:edit animated:YES];
             return;
         }
     }
-    
-    EditViewController *con = [EditViewController new];
-    con.collageImage = self.completeImage;
-    [self.navigationController pushViewController:con animated:YES];
 }
 
 - (IBAction)tappedShareButton:(id)sender
@@ -82,7 +100,7 @@ static NSString * const kShareMessage = @"雑コラ！";
 {
     NSString *contentKey = (__bridge NSString *)CFURLCreateStringByAddingPercentEscapes(
                                                                                         NULL,
-                                                                                        (CFStringRef)kShareMessage,
+                                                                                        (CFStringRef)self.shareMessage,
                                                                                         NULL,
                                                                                         (CFStringRef)@"!*'();:@&=+$,/?%#[]",
                                                                                         kCFStringEncodingUTF8 );
@@ -112,7 +130,8 @@ static NSString * const kShareMessage = @"雑コラ！";
     }
     
     SLComposeViewController *controller = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-    [controller setInitialText:[kShareMessage stringByRemovingPercentEncoding]];
+    [controller setInitialText:self.shareMessage];
+    [controller addImage:self.completeImage];
     __weak typeof(self) wself = self;
     controller.completionHandler =^(SLComposeViewControllerResult result){
         [wself dismissViewControllerAnimated:YES completion:nil];
@@ -133,7 +152,8 @@ static NSString * const kShareMessage = @"雑コラ！";
     }
     
     SLComposeViewController *controller = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-    [controller setInitialText:[kShareMessage stringByRemovingPercentEncoding]];
+    [controller setInitialText:self.shareMessage];
+    [controller addImage:self.completeImage];
     __weak typeof(self) wself = self;
     controller.completionHandler =^(SLComposeViewControllerResult result){
         [wself dismissViewControllerAnimated:YES completion:nil];

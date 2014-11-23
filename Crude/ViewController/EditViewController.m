@@ -39,13 +39,15 @@ enum {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                  action:@selector(doubleTappedView:)];
     [tapGesture setNumberOfTapsRequired:2];
-    
+//    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self
+//                                                                                       action:@selector(pinchedView:)];
     self.clippedView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
     [self.clippedView setTag:kTagClip];
     [self.clippedView setHidden:YES];
     [self.clippedView setBackgroundColor:[Utils colorWithColorCode:@"FFFFFF" alpha:0.6]];
     [self.clippedView addGestureRecognizer:panGesture];
     [self.clippedView addGestureRecognizer:tapGesture];
+//    [self.clippedView addGestureRecognizer:pinchGesture];
     [self.view addSubview:self.clippedView];
 }
 
@@ -138,6 +140,11 @@ enum {
     [panGesture setTranslation:CGPointZero inView:self.view];
 }
 
+- (void)pinchedView:(UIPinchGestureRecognizer *)pinchGesture
+{
+    
+}
+
 - (IBAction)tappedPasteButton:(id)sender
 {
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -168,22 +175,26 @@ enum {
 
 - (IBAction)tappedMaterialButton:(id)sender
 {
-//    MaterialViewController *con = [[MaterialViewController alloc] initWithStyle:UITableViewStylePlain];
-//    con.title = @"素材";
-//    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
-//    [self presentViewController:navi animated:YES completion:nil];
+    MaterialViewController *con = [[MaterialViewController alloc] initWithStyle:UITableViewStylePlain];
+    con.title = @"素材";
+    [self.navigationController pushViewController:con animated:YES];
 }
 
 - (IBAction)tappedCompleteButton:(id)sender
 {
     CompleteViewController *con = [CompleteViewController new];
     if (self.selectedMode == kTagTarget) {
-        con.completeImage = self.collageImageView.image;
-        [CallAPI uploadImage:self.collageImageView.image];
+        UIImage *image = [self.collageImageView imageFromView];
+        [self.collageImageView removeAllSubviews];
+        [self.collageImageView setImage:image];
+        con.completeImage = image;
     } else if (self.selectedMode == kTagMaterial) {
-        con.completeImage = self.materialImageView.image;
-        [CallAPI uploadImage:self.materialImageView.image];
+        UIImage *image = [self.materialImageView imageFromView];
+        [self.materialImageView removeAllSubviews];
+        [self.materialImageView setImage:image];
+        con.completeImage = image;
     }
+
     [self.navigationController pushViewController:con animated:YES];
 }
 

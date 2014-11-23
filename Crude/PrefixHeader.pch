@@ -14,5 +14,6 @@
 #import "UIView+Util.h"
 #import "CallAPI.h"
 #import "UIImage+Util.h"
+#import <MBProgressHUD/MBProgressHUD.h>
 
 #endif

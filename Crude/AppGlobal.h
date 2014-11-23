@@ -9,6 +9,13 @@
 #ifndef Crude_AppGlobal_h
 #define Crude_AppGlobal_h
 
+//API
+#ifdef DEBUG
+#define kAPIHost @"http://zatsu-colla.co"
+#else
+#define kAPIHost @"http://zatsu-colla.co"
+#endif
+
 //Color
 #define kNavBarColor [Utils colorWithColorCode:@"332C35" alpha:1.0]
 
