@@ -15,5 +15,6 @@
 #import "CallAPI.h"
 #import "UIImage+Util.h"
 #import <MBProgressHUD/MBProgressHUD.h>
+#import <UIImageView+AFNetworking.h>
 
 #endif

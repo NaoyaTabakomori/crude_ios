@@ -26,6 +26,9 @@
 {
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     NSString *URLString = [NSString stringWithFormat:@"%@/%@",kAPIHost, path];
+    if (!path) {
+        URLString = kAPIHost;
+    }
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"application/json"];
     [manager POST:URLString parameters:parameters success:(AFSuccessBlock)success failure:(AFFailureBlock)error];

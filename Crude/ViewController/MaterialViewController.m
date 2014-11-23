@@ -9,6 +9,7 @@
 #import "MaterialViewController.h"
 #import "CompleteViewController.h"
 #import "MaterialCell.h"
+#import "EditViewController.h"
 
 #ifdef DEBUG
 static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
@@ -16,7 +17,7 @@ static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazo
 static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
 #endif
 
-static NSString * const kCellIdentifier = @"CellIdentifier";
+static NSString * const kCellIdentifier = @"MaterialCell";
 
 @interface MaterialViewController ()
 @property (strong, nonatomic) NSArray *dataList;
@@ -30,7 +31,7 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
     self.title = @"素材";
     
     __weak typeof(self) wself = self;
-    [CallAPI callGetWithPath:nil
+    [CallAPI callGetWithPath:@"list.json"
                   parameters:nil
                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
                          wself.dataList = responseObject;
@@ -39,6 +40,9 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
                        error:^(AFHTTPRequestOperation *operation, NSError *error) {
                            [CallAPI showErrorAlert];
                        }];
+    
+    UINib *nib = [UINib nibWithNibName:kCellIdentifier bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:kCellIdentifier];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -66,44 +70,12 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
         cell = [[MaterialCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
     }
     
+    [cell.materialImageView setImage:nil];
     NSDictionary *data = self.dataList[indexPath.row];
     NSString *path = [data valueForKeyPath:@"large_image.path"];
     NSString *query = [data valueForKeyPath:@"large_image.query"];
     NSString *urlString = [NSString stringWithFormat:@"%@%@?%@", kS3Host, path, query];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-    [NSURLConnection
-     sendAsynchronousRequest:request
-     queue:[NSOperationQueue mainQueue]
-     completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-         if (!connectionError) {
-             UIImage *image = [[UIImage alloc] initWithData:data];
-             [cell.materialImageView setImage:image];
-         } else {
-             [CallAPI showErrorAlert];
-         }
-     }];
-    
-//    [cell.materialImageView sd_setImageWithURL:[NSURL URLWithString:urlString]];
-    
-//    [AFImageRequestOperation imageRequestOperationWithRequest:request
-//     　   imageProcessingBlock:nil
-//                                                      success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-//                                                          _imageView.image = image;
-//                                                      } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-//                                                          _imageView.image = 読み込み失敗の画像など;
-//                                                      }];
-    
-//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
-//    [cell.materialImageView
-//     setImageWithURLRequest:request
-//     placeholderImage:nil
-//     success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-//         NSLog(@"honoka");
-//     }
-//     failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-//         NSLog(@"error:%@", error.description);
-//     }];
-//    [cell.materialImageView setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:nil];
+    [cell.materialImageView setImageWithURL:[NSURL URLWithString:urlString]];
     
     return cell;
 }
@@ -111,11 +83,18 @@ static NSString * const kCellIdentifier = @"CellIdentifier";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    MaterialCell *cell = (MaterialCell *)[tableView cellForRowAtIndexPath:indexPath];
     
-//    CompleteViewController *con = [CompleteViewController new];
-//    MaterialCell *cell = (MaterialCell *)[tableView cellForRowAtIndexPath:indexPath];
-//    con.completeImage = cell.materialImageView.image;
-//    [self.navigationController pushViewController:con animated:YES];
+    for (UIViewController *con in self.navigationController.viewControllers) {
+        if ([con isKindOfClass:[EditViewController class]]) {
+            EditViewController *edit = (EditViewController *)con;
+            [edit.collageImageView setHidden:NO];
+            edit.segmentedControl.selectedSegmentIndex = 0;
+            edit.collageImage = cell.materialImageView.image;
+            [self.navigationController popToViewController:edit animated:YES];
+            return;
+        }
+    }
 }
 
 /*

@@ -63,6 +63,7 @@
     for (UIViewController *con in self.navigationController.viewControllers) {
         if ([con isKindOfClass:[EditViewController class]]) {
             EditViewController *edit = (EditViewController *)con;
+            [edit.collageImageView setHidden:NO];
             edit.segmentedControl.selectedSegmentIndex = 0;
             edit.collageImage = self.completeImage;
             [self.navigationController popToViewController:edit animated:YES];
