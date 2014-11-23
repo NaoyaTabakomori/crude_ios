@@ -16,7 +16,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    EditViewController *con = [EditViewController new];
+    MaterialViewController *con = [[MaterialViewController alloc] initWithStyle:UITableViewStylePlain];
     
     UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
     navi.interactivePopGestureRecognizer.enabled = NO;

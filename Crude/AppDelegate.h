@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EditViewController.h"
+#import "MaterialViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) EditViewController *controller;
+@property (strong, nonatomic) MaterialViewController *controller;
 
 @end
 

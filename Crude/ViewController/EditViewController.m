@@ -30,6 +30,13 @@ enum {
     [self.segmentedControl setTintColor:kNavBarColor];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    if (self.collageImage) {
+        [self.collageImageView setImage:self.collageImage];
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -55,15 +62,19 @@ enum {
 
 - (IBAction)tappedMaterialButton:(id)sender
 {
-#warning 後回し
-//    MaterialViewController *con = [MaterialViewController new];
-//    [self.navigationController pushOrPopViewController:con animated:YES];
+    MaterialViewController *con = [[MaterialViewController alloc] initWithStyle:UITableViewStylePlain];
+    con.title = @"素材";
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
+    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (IBAction)tappedCompleteButton:(id)sender
 {
-    CompleteViewController *con = [CompleteViewController new];
-    [self.navigationController pushOrPopViewController:con animated:YES];
+//    CompleteViewController *con = [CompleteViewController new];
+//    con.collageImage = self.collageImageView.image;
+    CompleteViewController *con = (CompleteViewController *)self.presentingViewController;
+    con.collageImage = self.collageImageView.image;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerControllerDelegate

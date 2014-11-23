@@ -16,4 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *changeAncestorButton;
 @property (weak, nonatomic) IBOutlet UIButton *changeParentButton;
 
+@property (strong, nonatomic) UIImage *collageImage;
+
 @end

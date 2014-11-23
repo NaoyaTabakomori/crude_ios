@@ -20,4 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *selectAlbumButton;
 @property (weak, nonatomic) IBOutlet UIButton *completeButton;
 
+@property (strong, nonatomic) UIImage *collageImage;
+
 @end

@@ -30,6 +30,9 @@
                     <state key="normal" title="この画像からコラを作る">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="tappedStartButton:" destination="-1" eventType="touchUpInside" id="J9A-KJ-qUF"/>
+                    </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="aDh-XN-eKe">
                     <rect key="frame" x="20" y="407" width="80" height="40"/>

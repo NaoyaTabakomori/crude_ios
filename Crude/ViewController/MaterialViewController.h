@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MaterialViewController : UICollectionViewController
+@interface MaterialViewController : UITableViewController
 
 @end

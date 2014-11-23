@@ -7,33 +7,114 @@
 //
 
 #import "MaterialViewController.h"
+#import "CompleteViewController.h"
+
+#ifdef DEBUG
+static NSString * const kS3host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
+#else
+static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazonaws.com";
+#endif
+
+static NSString * const kCellIdentifier = @"CellIdentifier";
 
 @interface MaterialViewController ()
-
+@property (strong, nonatomic) NSArray *dataList;
 @end
 
 @implementation MaterialViewController
 
-static NSString * const reuseIdentifier = @"Cell";
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [Utils setBackBarButtonItemNonTitle:self];
+    self.title = @"素材";
     
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Register cell classes
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
-    // Do any additional setup after loading the view.
+    __weak typeof(self) wself = self;
+    [CallAPI callGetWithPath:@"images.json"
+                  parameters:nil
+                     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                         wself.dataList = responseObject;
+                         [wself.tableView reloadData];
+                     }
+                       error:^(AFHTTPRequestOperation *operation, NSError *error) {
+                           [CallAPI showErrorAlert];
+                       }];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - Table view data source
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.dataList.count;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellIdentifier];
+    }
+    
+    NSDictionary *data = self.dataList[indexPath.row];
+    NSString *path = [data valueForKeyPath:@"large_image.path"];
+    NSString *query = [data valueForKeyPath:@"large_image.query"];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@?%@", kS3host, path, query];
+    [cell.imageView setImageWithURL:[NSURL URLWithString:urlString] placeholderImage:nil];
+    [cell.textLabel setText:path];
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    CompleteViewController *con = [CompleteViewController new];
+    NSString *title = [NSString stringWithFormat:@"%zd_full.JPG", indexPath.row + 1];
+    UIImage *image = [UIImage imageNamed:title];
+    con.collageImage = image;
+    [self.navigationController pushViewController:con animated:YES];
+}
+
+/*
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+*/
+
+/*
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }   
+}
+*/
+
+/*
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+}
+*/
+
+/*
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    // Return NO if you do not want the item to be re-orderable.
+    return YES;
+}
+*/
 
 /*
 #pragma mark - Navigation
@@ -42,56 +123,6 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-}
-*/
-
-#pragma mark <UICollectionViewDataSource>
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
-}
-
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 3;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell
-    
-    return cell;
-}
-
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
 }
 */
 

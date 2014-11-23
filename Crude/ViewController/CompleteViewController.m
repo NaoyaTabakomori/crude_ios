@@ -8,6 +8,7 @@
 
 #import "CompleteViewController.h"
 #import <Social/Social.h>
+#import "EditViewController.h"
 
 static NSString * const kShareMessage = @"雑コラ！";
 
@@ -25,10 +26,26 @@ static NSString * const kShareMessage = @"雑コラ！";
     [Utils setBackBarButtonItemNonTitle:self];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.collageImageView setImage:self.collageImage];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)tappedStartButton:(id)sender
+{
+    EditViewController *con = [EditViewController new];
+    con.title = @"編集";
+    con.collageImage = self.collageImage;
+    UINavigationController *navi = [[UINavigationController alloc] initWithRootViewController:con];
+    [self presentViewController:navi animated:YES completion:nil];
 }
 
 - (IBAction)tappedShareButton:(id)sender
@@ -68,15 +85,24 @@ static NSString * const kShareMessage = @"雑コラ！";
     if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:lineURLString]]) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:lineURLString]];
     }else{
-        //        [UIAlertView alertViewWithTitle:@"エラー" message:@"この端末にはLINEがインストールされていません。"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー"
+                                                        message:@"この端末にはLINEがインストールされていません。"
+                                                       delegate:nil
+                                              cancelButtonTitle:@""
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
     }
 }
 
 - (void)postTwitter
 {
     if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
-        //        [UIAlertView alertViewWithTitle:@"エラー"
-        //                                message:@"Twitterアカウントが設定されていません。"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー"
+                                                        message:@"Twitterアカウントが設定されていません。"
+                                                       delegate:nil
+                                              cancelButtonTitle:@""
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
         return;
     }
     
@@ -92,8 +118,12 @@ static NSString * const kShareMessage = @"雑コラ！";
 - (void)postFacebook
 {
     if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeFacebook]) {
-        //        [UIAlertView alertViewWithTitle:@"エラー"
-        //                                message:@"Facebookアカウントが設定されていません。"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"エラー"
+                                                        message:@"Facebookアカウントが設定されていません。"
+                                                       delegate:nil
+                                              cancelButtonTitle:@""
+                                              otherButtonTitles:@"OK", nil];
+        [alert show];
         return;
     }
     
