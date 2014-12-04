@@ -24,4 +24,13 @@
     return [UIImage imageWithCGImage:clippedImageRef];
 }
 
+- (UIImage *)renderImage
+{
+    UIGraphicsBeginImageContext(self.size);
+    [self drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
 @end

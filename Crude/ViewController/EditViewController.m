@@ -44,7 +44,16 @@ enum {
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     if (self.collageImage) {
-        [self.collageImageView setImage:self.collageImage];
+        self.collageImage = [self.collageImage renderImage];
+        
+        if (self.selectedMode == kTagTarget) {
+            [self.collageImageView setImage:self.collageImage];
+        } else if (self.selectedMode == kTagMaterial) {
+            [self.materialImageView setImage:self.collageImage];
+        }
+        
+        //貼付けたのでnilにする
+        self.collageImage = nil;
     }
 }
 
@@ -266,9 +275,9 @@ enum {
     
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     if (self.selectedMode == kTagTarget) {
-        [self.collageImageView setImage:image];
+        [self.collageImageView setImage:[image renderImage]];
     } else if (self.selectedMode == kTagMaterial) {
-        [self.materialImageView setImage:image];
+        [self.materialImageView setImage:[image renderImage]];
     }
 }
 

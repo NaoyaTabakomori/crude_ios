@@ -10,4 +10,5 @@
 
 @interface UIImage (Util)
 - (UIImage *)clipImageWithRect:(CGRect)rect imageViewSize:(CGSize)size;
+- (UIImage *)renderImage;
 @end

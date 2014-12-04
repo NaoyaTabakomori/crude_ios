@@ -20,7 +20,7 @@ static NSString * const kS3Host = @"https://crude-bucket.s3-ap-northeast-1.amazo
 static NSString * const kCellIdentifier = @"MaterialCell";
 
 @interface MaterialViewController ()
-@property (strong, nonatomic) NSArray *dataList;
+@property (strong, nonatomic) NSMutableArray *dataList;
 @end
 
 @implementation MaterialViewController
@@ -88,8 +88,6 @@ static NSString * const kCellIdentifier = @"MaterialCell";
     for (UIViewController *con in self.navigationController.viewControllers) {
         if ([con isKindOfClass:[EditViewController class]]) {
             EditViewController *edit = (EditViewController *)con;
-            [edit.collageImageView setHidden:NO];
-            edit.segmentedControl.selectedSegmentIndex = 0;
             edit.collageImage = cell.materialImageView.image;
             [self.navigationController popToViewController:edit animated:YES];
             return;
@@ -97,48 +95,21 @@ static NSString * const kCellIdentifier = @"MaterialCell";
     }
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if(self.tableView.contentOffset.y >= (self.tableView.contentSize.height - self.tableView.bounds.size.height))
+//    {
+//        __weak typeof(self) wself = self;
+//        [CallAPI callGetWithPath:@"list.json"
+//                      parameters:nil
+//                         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//                             wself.dataList = responseObject;
+//                             [wself.tableView reloadData];
+//                         }
+//                           error:^(AFHTTPRequestOperation *operation, NSError *error) {
+//                               [CallAPI showErrorAlert];
+//                           }];
+//    }
+//}
 
 @end
