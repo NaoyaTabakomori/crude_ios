@@ -130,7 +130,7 @@ enum {
                                                                        self.collageImageView.originY,
                                                                        100,
                                                                        100)];
-    self.clippingView.parentView = self.view;
+    [self.clippingView setHidden:YES];
     [self.view addSubview:self.clippingView];
 }
 

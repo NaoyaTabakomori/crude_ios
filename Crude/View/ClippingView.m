@@ -8,7 +8,7 @@
 
 #import "ClippingView.h"
 
-static const NSInteger kCircleOneSide = 44;
+static const NSInteger kCircleOneSide = 25;
 enum {
     kTagLtCircle = 1,
     kTagLbCircle,
