@@ -17,7 +17,8 @@
 		9F2129E41A218CFC00AF9834 /* CallAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2129E31A218CFC00AF9834 /* CallAPI.m */; };
 		9F2C1B7A1A20AFB1000F454F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F2C1B791A20AFB1000F454F /* Utils.m */; };
 		9FADE0041A2201A10088A139 /* MaterialCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FADE0031A2201A10088A139 /* MaterialCell.m */; };
-		9FADE0061A2201B90088A139 /* MaterialCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FADE0051A2201B90088A139 /* MaterialCell.xib */; };
+		9FBCB1971A39B40B0051C702 /* ClippingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FBCB1961A39B40B0051C702 /* ClippingView.m */; };
+		9FBCB1991A39B4540051C702 /* MaterialCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FBCB1981A39B4540051C702 /* MaterialCell.xib */; };
 		9FBE34481A21C7A600173F47 /* UIImage+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FBE34471A21C7A600173F47 /* UIImage+Util.m */; };
 		9FC7793F1A2087FD00CB7D86 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FC779301A2087FD00CB7D86 /* AppDelegate.m */; };
 		9FC779401A2087FD00CB7D86 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FC779321A2087FD00CB7D86 /* Images.xcassets */; };
@@ -56,7 +57,9 @@
 		9F2C1B791A20AFB1000F454F /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		9FADE0021A2201A10088A139 /* MaterialCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MaterialCell.h; path = View/MaterialCell.h; sourceTree = "<group>"; };
 		9FADE0031A2201A10088A139 /* MaterialCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MaterialCell.m; path = View/MaterialCell.m; sourceTree = "<group>"; };
-		9FADE0051A2201B90088A139 /* MaterialCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MaterialCell.xib; sourceTree = "<group>"; };
+		9FBCB1951A39B40B0051C702 /* ClippingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClippingView.h; path = View/ClippingView.h; sourceTree = "<group>"; };
+		9FBCB1961A39B40B0051C702 /* ClippingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ClippingView.m; path = View/ClippingView.m; sourceTree = "<group>"; };
+		9FBCB1981A39B4540051C702 /* MaterialCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MaterialCell.xib; path = View/MaterialCell.xib; sourceTree = "<group>"; };
 		9FBE34461A21C7A600173F47 /* UIImage+Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Util.h"; sourceTree = "<group>"; };
 		9FBE34471A21C7A600173F47 /* UIImage+Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Util.m"; sourceTree = "<group>"; };
 		9FC7792F1A2087FD00CB7D86 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -157,7 +160,9 @@
 			children = (
 				9FADE0021A2201A10088A139 /* MaterialCell.h */,
 				9FADE0031A2201A10088A139 /* MaterialCell.m */,
-				9FADE0051A2201B90088A139 /* MaterialCell.xib */,
+				9FBCB1981A39B4540051C702 /* MaterialCell.xib */,
+				9FBCB1951A39B40B0051C702 /* ClippingView.h */,
+				9FBCB1961A39B40B0051C702 /* ClippingView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -299,7 +304,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FADE0061A2201B90088A139 /* MaterialCell.xib in Resources */,
+				9FBCB1991A39B4540051C702 /* MaterialCell.xib in Resources */,
 				9F04A08E1A20C88B0092C31A /* EditViewController.xib in Resources */,
 				9FC779401A2087FD00CB7D86 /* Images.xcassets in Resources */,
 				9F04A0981A20D8080092C31A /* CompleteViewController.xib in Resources */,
@@ -361,6 +366,7 @@
 				9F2129E41A218CFC00AF9834 /* CallAPI.m in Sources */,
 				9FC779441A2087FD00CB7D86 /* UIView+Util.m in Sources */,
 				9FBE34481A21C7A600173F47 /* UIImage+Util.m in Sources */,
+				9FBCB1971A39B40B0051C702 /* ClippingView.m in Sources */,
 				9F2C1B7A1A20AFB1000F454F /* Utils.m in Sources */,
 				9FC779451A2087FD00CB7D86 /* EditViewController.m in Sources */,
 			);

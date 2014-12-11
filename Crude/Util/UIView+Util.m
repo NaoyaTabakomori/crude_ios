@@ -158,4 +158,10 @@
     return image;
 }
 
+- (void)makeCircle
+{
+    [self.layer setCornerRadius:self.sizeWidth / 2];
+    [self setClipsToBounds:YES];
+}
+
 @end

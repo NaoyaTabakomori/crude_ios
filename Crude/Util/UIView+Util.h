@@ -18,5 +18,6 @@
 - (void)showWithFadeAnimaton;
 - (void)closeWithFadeAnimaton;
 - (UIImage *)imageFromView;
+- (void)makeCircle;
 
 @end

@@ -9,6 +9,7 @@
 #import "EditViewController.h"
 #import "CompleteViewController.h"
 #import "MaterialViewController.h"
+#import "ClippingView.h"
 
 enum {
     kTagTarget,
@@ -19,7 +20,7 @@ enum {
 
 @interface EditViewController()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (assign, nonatomic) NSInteger selectedMode;
-@property (strong, nonatomic) UIView *clippedView;
+@property (strong, nonatomic) ClippingView *clippingView;
 @property (strong, nonatomic) UIImage *clippedImage;
 @property (assign, nonatomic) CGAffineTransform currentClipTransform;
 @end
@@ -106,24 +107,31 @@ enum {
 
 - (void)setupClipView
 {
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(doubleTappedView:)];
-    [tapGesture setNumberOfTapsRequired:2];
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(draggedView:)];
-    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self
-                                                                                       action:@selector(pinchedView:)];
-//    UIRotationGestureRecognizer *rotateGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self
-//                                                                                              action:@selector(rotatedView:)];
-    self.clippedView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
-    [self.clippedView setTag:kTagClip];
-    [self.clippedView setHidden:YES];
-    [self.clippedView setBackgroundColor:[Utils colorWithColorCode:@"9A9E93" alpha:0.6]];
-    [self.clippedView addGestureRecognizer:tapGesture];
-    [self.clippedView addGestureRecognizer:panGesture];
-    [self.clippedView addGestureRecognizer:pinchGesture];
-//    [self.clippedView addGestureRecognizer:rotateGesture];
-    [self.view addSubview:self.clippedView];
+//    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
+//                                                                                 action:@selector(doubleTappedView:)];
+//    [tapGesture setNumberOfTapsRequired:2];
+//    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self
+//                                                                                 action:@selector(draggedView:)];
+//    UIPinchGestureRecognizer *pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self
+//                                                                                       action:@selector(pinchedView:)];
+////    UIRotationGestureRecognizer *rotateGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self
+////                                                                                              action:@selector(rotatedView:)];
+//    self.clippedView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+//    [self.clippedView setTag:kTagClip];
+//    [self.clippedView setHidden:YES];
+//    [self.clippedView setBackgroundColor:[Utils colorWithColorCode:@"9A9E93" alpha:0.6]];
+//    [self.clippedView addGestureRecognizer:tapGesture];
+//    [self.clippedView addGestureRecognizer:panGesture];
+//    [self.clippedView addGestureRecognizer:pinchGesture];
+////    [self.clippedView addGestureRecognizer:rotateGesture];
+//    [self.view addSubview:self.clippedView];
+    
+    self.clippingView = [[ClippingView alloc] initWithFrame:CGRectMake(self.collageImageView.originX,
+                                                                       self.collageImageView.originY,
+                                                                       100,
+                                                                       100)];
+    self.clippingView.parentView = self.view;
+    [self.view addSubview:self.clippingView];
 }
 
 #pragma mark - clipView Gesture
@@ -131,21 +139,21 @@ enum {
 {
     if (tapGesture.view.tag == kTagClip) {
         if (self.selectedMode == kTagTarget) {
-            CGRect rect = CGRectMake(self.clippedView.originX - self.collageImageView.originX,
-                                     self.clippedView.originY - self.collageImageView.originY,
-                                     self.clippedView.sizeWidth,
-                                     self.clippedView.sizeHeight);
+            CGRect rect = CGRectMake(self.clippingView.originX - self.collageImageView.originX,
+                                     self.clippingView.originY - self.collageImageView.originY,
+                                     self.clippingView.sizeWidth,
+                                     self.clippingView.sizeHeight);
             self.clippedImage =  [self.collageImageView.image clipImageWithRect:rect
                                                                   imageViewSize:self.collageImageView.frame.size];
-            [self.clippedView setHidden:YES];
+            [self.clippingView setHidden:YES];
         } else if (self.selectedMode == kTagMaterial) {
-            CGRect rect = CGRectMake(self.clippedView.originX - self.materialImageView.originX,
-                                     self.clippedView.originY - self.materialImageView.originY,
-                                     self.clippedView.sizeWidth,
-                                     self.clippedView.sizeHeight);
+            CGRect rect = CGRectMake(self.clippingView.originX - self.materialImageView.originX,
+                                     self.clippingView.originY - self.materialImageView.originY,
+                                     self.clippingView.sizeWidth,
+                                     self.clippingView.sizeHeight);
             self.clippedImage =  [self.materialImageView.image clipImageWithRect:rect
                                                                    imageViewSize:self.materialImageView.frame.size];
-            [self.clippedView setHidden:YES];
+            [self.clippingView setHidden:YES];
         }
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@""
@@ -185,10 +193,10 @@ enum {
 - (void)pinchedView:(UIPinchGestureRecognizer *)pinchGesture
 {
     if (pinchGesture.state == UIGestureRecognizerStateBegan) {
-        self.currentClipTransform = self.clippedView.transform;
+        self.currentClipTransform = self.clippingView.transform;
     }
     CGFloat scale = [pinchGesture scale];
-    self.clippedView.transform = CGAffineTransformConcat(self.currentClipTransform, CGAffineTransformMakeScale(scale, scale));
+    self.clippingView.transform = CGAffineTransformConcat(self.currentClipTransform, CGAffineTransformMakeScale(scale, scale));
 }
 
 - (void)rotatedView:(UIRotationGestureRecognizer *)rotateGesture
@@ -212,7 +220,21 @@ enum {
 
 - (IBAction)tappedClipButton:(id)sender
 {
-    [self.clippedView setHidden:NO];
+    [self.clippingView setHidden:NO];
+    
+    self.title = @"切り抜き";
+    
+    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"キャンセル"
+                                                             style:UIBarButtonItemStylePlain
+                                                            target:self
+                                                            action:@selector(tappedCancelButtonForClipping)];
+    self.navigationItem.leftBarButtonItem = left;
+    
+    UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithTitle:@"OK"
+                                                              style:UIBarButtonItemStylePlain
+                                                             target:self
+                                                             action:@selector(tappedOKButtonForClipping)];
+    self.navigationItem.rightBarButtonItem = right;
 }
 
 - (IBAction)tappedPasteButton:(id)sender
@@ -222,7 +244,7 @@ enum {
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                  action:@selector(doubleTappedView:)];
     [tapGesture setNumberOfTapsRequired:2];
-    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.clippedView.sizeWidth, self.clippedView.sizeHeight)];
+    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.clippingView.sizeWidth, self.clippingView.sizeHeight)];
     [iv setTag:kTagPaste];
     [iv setImage:self.clippedImage];
     [iv setUserInteractionEnabled:YES];
@@ -266,6 +288,25 @@ enum {
     }
 
     [self.navigationController pushViewController:con animated:YES];
+}
+
+- (void)tappedCancelButtonForClipping
+{
+    [self.clippingView setHidden:YES];
+    [self completeAction];
+}
+
+- (void)tappedOKButtonForClipping
+{
+    [self.clippingView setHidden:YES];
+    [self completeAction];
+}
+
+- (void)completeAction
+{
+    self.title = @"編集";
+    self.navigationItem.leftBarButtonItem = nil;
+    self.navigationItem.rightBarButtonItem = nil;
 }
 
 #pragma mark - UIImagePickerControllerDelegate
