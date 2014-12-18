@@ -10,17 +10,12 @@
 
 static const NSInteger kCircleOneSide = 25;
 enum {
-    kTagLtCircle = 1,
-    kTagLbCircle,
-    kTagRtCircle,
-    kTagRbCircle
+    kTagCircle = 1,
+    kTagMainView
 };
 
 @interface ClippingView()
-@property (strong, nonatomic) UIView *ltCircle;
-@property (strong, nonatomic) UIView *lbCircle;
-@property (strong, nonatomic) UIView *rtCircle;
-@property (strong, nonatomic) UIView *rbCircle;
+@property (strong, nonatomic) UIView *circle;
 @end
 
 @implementation ClippingView
@@ -36,83 +31,62 @@ enum {
 
 - (void)setControls:(CGRect)frame
 {
-    UIColor *circleColor = [UIColor colorWithWhite:0 alpha:0.8];
-    [self setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
+    [self setBackgroundColor:[UIColor clearColor]];
     
-    self.ltCircle = [[UIView alloc] initWithFrame:CGRectMake(- kCircleOneSide / 2,
-                                                             - kCircleOneSide / 2,
-                                                             kCircleOneSide,
-                                                             kCircleOneSide)];
-    [self.ltCircle makeCircle];
-    [self.ltCircle setBackgroundColor:circleColor];
-    [self addSubview:self.ltCircle];
-    [self.ltCircle setTag:kTagLtCircle];
-    UIPanGestureRecognizer *panGestureLt = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                   action:@selector(draggedView:)];
-    [self.ltCircle addGestureRecognizer:panGestureLt];
-    
-    self.lbCircle = [[UIView alloc] initWithFrame:CGRectMake(- kCircleOneSide / 2,
-                                                             frame.size.height - kCircleOneSide / 2,
-                                                             kCircleOneSide,
-                                                             kCircleOneSide)];
-    [self.lbCircle makeCircle];
-    [self.lbCircle setBackgroundColor:circleColor];
-    [self addSubview:self.lbCircle];
-    [self.lbCircle setTag:kTagLbCircle];
-    UIPanGestureRecognizer *panGestureLb = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                   action:@selector(draggedView:)];
-    [self.lbCircle addGestureRecognizer:panGestureLb];
-    
-    self.rtCircle = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - kCircleOneSide / 2,
-                                                             - kCircleOneSide / 2,
-                                                             kCircleOneSide,
-                                                             kCircleOneSide)];
-    [self.rtCircle makeCircle];
-    [self.rtCircle setBackgroundColor:circleColor];
-    [self addSubview:self.rtCircle];
-    [self.rtCircle setTag:kTagRtCircle];
-    UIPanGestureRecognizer *panGestureRt = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                   action:@selector(draggedView:)];
-    [self.rtCircle addGestureRecognizer:panGestureRt];
+    self.mainView = [[UIView alloc] initWithFrame:CGRectMake(0,
+                                                             0,
+                                                             frame.size.width - kCircleOneSide / 2,
+                                                             frame.size.height - kCircleOneSide / 2)];
+    [self.mainView setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.6]];
+    [self addSubview:self.mainView];
+    [self.mainView setTag:kTagMainView];
+    UIPanGestureRecognizer *panGestureMainView = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                         action:@selector(draggedView:)];
+    [self.mainView addGestureRecognizer:panGestureMainView];
 
-    self.rbCircle = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - kCircleOneSide / 2,
-                                                             frame.size.height - kCircleOneSide / 2,
-                                                             kCircleOneSide,
-                                                             kCircleOneSide)];
-    [self.rbCircle makeCircle];
-    [self.rbCircle setBackgroundColor:circleColor];
-    [self addSubview:self.rbCircle];
-    [self.rbCircle setTag:kTagRbCircle];
-    UIPanGestureRecognizer *panGestureRb = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                   action:@selector(draggedView:)];
-    [self.rbCircle addGestureRecognizer:panGestureRb];
-}
-
-- (void)drawRect:(CGRect)rect
-{
-#warning どうするか考える
-    self.clippingRect = rect;
+    self.circle = [[UIView alloc] initWithFrame:CGRectMake(frame.size.width - kCircleOneSide,
+                                                           frame.size.height - kCircleOneSide,
+                                                           kCircleOneSide,
+                                                           kCircleOneSide)];
+    [self.circle makeCircle];
+    [self.circle setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
+    [self addSubview:self.circle];
+    [self.circle setTag:kTagCircle];
+    UIPanGestureRecognizer *panGestureCircle = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                                       action:@selector(draggedView:)];
+    [self.circle addGestureRecognizer:panGestureCircle];
 }
 
 - (void)draggedView:(UIPanGestureRecognizer *)panGesture
 {
-#warning 親Viewより離れた位置はGestureRecognizerが感知できない
-#warning ドラッグ後にClippingViewのSizeを調整すること
-    CGPoint location = [panGesture translationInView:panGesture.view.superview];
-    CGPoint movedPoint = CGPointMake(panGesture.view.centerX + location.x, panGesture.view.centerY + location.y);
-    [panGesture.view setCenter:movedPoint];
-    
-//    if (panGesture.view.tag == kTagLtCircle) {
-//    
-//    } else if (panGesture.view.tag == kTagLbCircle) {
-//    
-//    } else if (panGesture.view.tag == kTagRtCircle) {
-//    
-//    } else if (panGesture.view.tag == kTagRbCircle) {
-//        
-//    }
-    
-    [panGesture setTranslation:CGPointZero inView:panGesture.view.superview];
+    if (panGesture.view.tag == kTagCircle) {
+        CGPoint location = [panGesture translationInView:self];
+        CGPoint movedPoint = CGPointMake(self.circle.centerX + location.x, self.circle.centerY + location.y);
+        [self setSize:CGSizeMake(self.sizeWidth + location.x,
+                                 self.sizeHeight + location.y)];
+        [self.mainView setSize:CGSizeMake(self.mainView.sizeWidth + location.x,
+                                          self.mainView.sizeHeight + location.y)];
+        [self.circle setCenter:movedPoint];
+        
+#warning 領域の上限・下限は設定できるようにしておきたい
+//        [self setSize:CGSizeMake(MAX(self.sizeWidth + movedPoint.x - self.circle.centerX, kCircleOneSide * 1.5),
+//                                 MAX(self.sizeHeight + movedPoint.y - self.circle.centerY, kCircleOneSide * 1.5))];
+//        [self.mainView setSize:CGSizeMake(MAX(self.mainView.sizeWidth + movedPoint.x - self.circle.centerX, kCircleOneSide),
+//                                          MAX(self.mainView.sizeHeight + movedPoint.y - self.circle.centerY, kCircleOneSide))];
+//        if (movedPoint.x > kCircleOneSide && movedPoint.y > kCircleOneSide) {
+//            [self.circle setCenter:movedPoint];
+//        }
+        
+        [panGesture setTranslation:CGPointZero inView:self];
+    } else if (panGesture.view.tag == kTagMainView) {
+        CGPoint location = [panGesture translationInView:self];
+        [self setCenter:CGPointMake(self.centerX + location.x,
+                                    self.centerY + location.y)];
+        [self.mainView setOrigin:CGPointZero];
+        [self.circle setCenter:CGPointMake(self.mainView.sizeWidth,
+                                           self.mainView.sizeHeight)];
+        [panGesture setTranslation:CGPointZero inView:self];
+    }
 }
 
 @end

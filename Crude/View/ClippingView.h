@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ClippingView : UIView
-@property (assign, nonatomic) CGRect clippingRect;
+@property (strong, nonatomic) UIView *mainView;
 @end
